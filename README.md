@@ -59,9 +59,9 @@ The production series shows a strong long-run upward movement, indicating that s
 
 The analysis applies first differencing:
 
-\[
+$$
 \Delta y_t = y_t - y_{t-1}
-\]
+$$
 
 ![First-differenced sugarcane production](figures/02_first_difference.png)
 
@@ -201,11 +201,11 @@ Residual diagnostics were used to assess whether the selected **ARIMA(2,1,0)** m
 
 Residuals were additionally scaled by the estimated innovation standard deviation:
 
-\[
+$$
 e_t^{*} =
 \frac{e_t}
 {\sqrt{\hat{\sigma}^{2}}}
-\]
+$$
 
 ![Standardized residuals](figures/05_standardized_residuals.png)
 

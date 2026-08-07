@@ -1,4 +1,4 @@
 "Series","Test","Statistic","Lag","Critical_Value_5pct","Conclusion"
-"Level","ADF - Fossati",-2.96416786120268,2,-3.41,"Fail to reject unit root"
-"First difference","ADF - Fossati",-11.6936818089611,1,-2.86,"Reject unit root"
+"Level","ADF-OLS + BIC",-2.96416786120268,2,-3.41,"Fail to reject unit root"
+"First difference","ADF-OLS + BIC",-11.6936818089611,1,-2.86,"Reject unit root"
 "First difference","ADF - tseries",-5.29878726515847,3,NA,"Reject unit root (p < 0.01)"
