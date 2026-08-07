@@ -20,6 +20,8 @@ The original replication was completed as a Financial Time Series project in 202
 - Audit whether key published statistics can be reconstructed from the reported data and methodology.
 - Test a drift specification as a separate extension without altering the original replication.
 
+---
+
 ## Key Result
 
 The core replication selects **ARIMA(2,1,0)** among the three original candidate specifications because it has the lowest AIC, AICc, and BIC, while residual diagnostics provide no evidence of significant remaining serial correlation.
@@ -364,6 +366,9 @@ Several reported quantities cannot be reproduced exactly from the published data
 At the same time, the paper's information-criterion arithmetic is internally consistent with its reported likelihood values.
 
 The source of the remaining differences cannot be determined from the published information alone. However, because some discrepancies are already visible in quantities calculated directly from the published observations, they cannot be attributed solely to software-version or ARIMA-estimation differences.
+
+---
+
 ## Extension: Testing a Drift Specification
 
 
@@ -439,7 +444,8 @@ arima-sugarcane-replication/
 │   ├── 05_standardized_residuals.png
 │   ├── 06_qq_plot.png
 │   ├── 07_residual_acf.png
-│   └── 08_acf_pacf_first_difference.png
+│   ├── 08_acf_pacf_first_difference.png
+│   └── 09_forecast_path_comparison.png
 └── results/
     ├── drift_forecast_comparison.csv
     ├── drift_model_comparison.csv
@@ -489,7 +495,7 @@ The first command reproduces the core replication workflow and prints its model 
 
 ### 4. Reproduce the committed outputs
 
-To regenerate all committed output files — including the six result tables and eight figures — run from the repository root:
+To regenerate all committed output files — including the six result tables and nine figures — run from the repository root:
 
 ```bash
 Rscript save_outputs.R
@@ -507,6 +513,8 @@ Reproducible outputs generated: 6 result tables in results/ and 9 figures in fig
 
 ## Skills Demonstrated
 
+- Reproducibility auditing of published statistical results
+- Specification testing against a published forecasting model
 - Time-series data preparation in R
 - Stationarity testing with Augmented Dickey-Fuller tests
 - ARIMA model identification using ACF and PACF
