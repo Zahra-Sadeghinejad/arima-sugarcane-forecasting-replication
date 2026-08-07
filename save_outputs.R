@@ -6,7 +6,7 @@
 #
 # This script sources analysis.R, then regenerates:
 #   - 4 CSV files in results/
-#   - 7 PNG files in figures/
+#   - 8 PNG files in figures/
 
 # -------------------------------------------------------------------------
 # 1. Run the analysis without creating an extra Rplots.pdf

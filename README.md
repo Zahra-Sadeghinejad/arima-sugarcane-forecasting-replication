@@ -349,7 +349,7 @@ This reproduces the statistical workflow and prints the main model estimates, fo
 
 ### 4. Reproduce the committed outputs
 
-To regenerate all committed output files — including the four result tables and seven figures — run from the repository root:
+To regenerate all committed output files — including the four result tables and eight figures — run from the repository root:
 
 ```bash
 Rscript save_outputs.R
@@ -360,7 +360,7 @@ Rscript save_outputs.R
 A successful run ends with:
 
 ```text
-Reproducible outputs generated: 4 result tables in results/ and 7 figures in figures/.
+Reproducible outputs generated: 4 result tables in results/ and 8 figures in figures/.
 ```
 
 ---
