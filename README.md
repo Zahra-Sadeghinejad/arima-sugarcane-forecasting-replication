@@ -366,6 +366,10 @@ At the same time, the paper's information-criterion arithmetic is internally con
 The source of the remaining differences cannot be determined from the published information alone. However, because some discrepancies are already visible in quantities calculated directly from the published observations, they cannot be attributed solely to software-version or ARIMA-estimation differences.
 ## Extension: Testing a Drift Specification
 
+
+
+![Forecast path comparison](figures/09_forecast_path_comparison.png)
+
 The core replication above preserves the ARIMA(2,1,0) specification used in the original 2023 project. The following analysis is intentionally treated as a separate extension rather than as a replacement for that replication.
 
 A second ARIMA(2,1,0) model was estimated with a drift term.
@@ -496,7 +500,7 @@ Rscript save_outputs.R
 A successful run ends with:
 
 ```text
-Reproducible outputs generated: 6 result tables in results/ and 8 figures in figures/.
+Reproducible outputs generated: 6 result tables in results/ and 9 figures in figures/.
 ```
 
 ---

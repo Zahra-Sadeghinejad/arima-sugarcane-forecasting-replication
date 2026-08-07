@@ -192,3 +192,30 @@ plot_acf_pacf_first_difference <- function(diff_series) {
   )
 }
 
+
+
+plot_forecast_path_comparison <- function(comparison) {
+  matplot(
+    comparison$Year,
+    comparison[, c("Published_Forecast", "Replication_No_Drift", "Estimated_Drift", "Paper_Stated_Equation")],
+    type = "o",
+    lty = c(1, 2, 3, 4),
+    pch = c(16, 1, 2, 0),
+    xlab = "Year",
+    ylab = "Sugarcane production (million tonnes)",
+    main = "Published and Reconstructed Forecast Paths"
+  )
+
+  legend(
+    "bottomright",
+    legend = c(
+      "Published forecast",
+      "Replication: no drift",
+      "Estimated drift",
+      "Paper-stated equation"
+    ),
+    lty = c(1, 2, 3, 4),
+    pch = c(16, 1, 2, 0),
+    bty = "n"
+  )
+}

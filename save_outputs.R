@@ -6,7 +6,7 @@
 #
 # This script sources analysis.R, then regenerates:
 #   - 6 CSV files in results/
-#   - 8 PNG files in figures/
+#   - 9 PNG files in figures/
 
 # -------------------------------------------------------------------------
 # 1. Run the analysis without creating an extra Rplots.pdf
@@ -278,7 +278,19 @@ plot_acf_pacf_first_difference(mydata$diff1)
 dev.off()
 
 
+# Figure 9: published and reconstructed forecast paths
+png(
+  "figures/09_forecast_path_comparison.png",
+  width = 1600,
+  height = 1000,
+  res = 160
+)
+
+plot_forecast_path_comparison(drift_forecast_comparison)
+
+dev.off()
+
 message(
   "Reproducible outputs generated: ",
-  "6 result tables in results/ and 8 figures in figures/."
+  "6 result tables in results/ and 9 figures in figures/."
 )
