@@ -211,11 +211,7 @@ abline(h = 0)
 # Standardize residuals using the estimated innovation standard deviation
 standardized_residuals <- residuals_model1 / sqrt(model1$sigma2)
 
-plot_standardized_residuals(
-  standardized_residuals,
-  col = "blue",
-  type = "h"
-)
+plot_standardized_residuals(standardized_residuals)
 
 # Residuals displayed as a line plot
 plot(

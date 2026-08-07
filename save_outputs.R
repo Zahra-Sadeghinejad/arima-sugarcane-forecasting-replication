@@ -195,11 +195,7 @@ png(
   height = 1000,
   res = 160
 )
-plot_standardized_residuals(
-  standardized_residuals,
-  col = "black",
-  type = "h"
-)
+plot_standardized_residuals(standardized_residuals)
 dev.off()
 
 # Figure 6: Q-Q plot

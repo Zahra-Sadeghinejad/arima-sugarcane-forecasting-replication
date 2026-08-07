@@ -133,17 +133,13 @@ plot_observed_vs_fitted <- function(production, fitted_values) {
   )
 }
 
-plot_standardized_residuals <- function(
-  standardized_residuals,
-  col = "black",
-  type = "h"
-) {
+plot_standardized_residuals <- function(standardized_residuals) {
   plot(
     standardized_residuals,
-    col = col,
+    col = "black",
     ylab = "Standardized Residual",
     xlab = "Year",
-    type = type,
+    type = "h",
     main = "Standardized Residuals from ARIMA(2,1,0)"
   )
 
