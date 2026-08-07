@@ -5,7 +5,7 @@
 #   source("save_outputs.R")
 #
 # This script sources analysis.R, then regenerates:
-#   - 6 CSV files in results/
+#   - 7 CSV files in results/
 #   - 9 PNG files in figures/
 
 # -------------------------------------------------------------------------
@@ -169,6 +169,35 @@ write.csv(
   row.names = FALSE
 )
 
+# Published-versus-reproduced ACF comparison
+published_acf <- c(
+  0.202, -0.620, -0.400, 0.213, 0.336,
+ -0.050, -0.110,  0.017, -0.020, -0.100,
+ -0.070,  0.132,  0.091, -0.150, -0.140,
+  0.087,  0.176, -0.010, -0.090,  0.021
+)
+
+reproduced_acf <- as.numeric(acf_result$acf)[2:21]
+
+stopifnot(length(reproduced_acf) == 20)
+
+acf_difference <- abs(reproduced_acf - published_acf)
+
+acf_comparison <- data.frame(
+  Lag = 1:20,
+  Published_ACF = published_acf,
+  Reproduced_ACF = round(reproduced_acf, 6),
+  Abs_Difference = round(acf_difference, 6),
+  Within_0_003 = acf_difference <= (0.003 + 1e-12),
+  Within_0_02 = acf_difference <= (0.02 + 1e-12)
+)
+
+write.csv(
+  acf_comparison,
+  "results/acf_comparison.csv",
+  row.names = FALSE
+)
+
 # Drift-extension model comparison
 write.csv(
   drift_model_comparison,
@@ -292,5 +321,5 @@ dev.off()
 
 message(
   "Reproducible outputs generated: ",
-  "6 result tables in results/ and 9 figures in figures/."
+  "7 result tables in results/ and 9 figures in figures/."
 )
