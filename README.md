@@ -297,9 +297,9 @@ However, the mean implied directly by the published observations is:
 
 This follows directly from the telescoping sum of the first differences.
 
-For comparison, fitting ARIMA(2,1,0) with a drift term in R produces an estimated drift of **4.4587**. The drift parameter belongs to a different model specification and is therefore not treated as identical to the sample mean; it is included only as an additional comparison.
+For comparison, fitting an AR(2) model to the differenced series with an estimated mean gives approximately **4.4587** under maximum likelihood and **4.5024** under conditional sum of squares. The equivalent ARIMA(2,1,0) drift specification gives the same maximum-likelihood estimate of approximately **4.4587**.
 
-Neither quantity yields the stated value of 5.13.
+Thus, neither the direct sample mean (**4.6746**) nor these standard estimated-mean specifications yield the stated value of **5.13**.
 
 ### ARIMA coefficients
 
@@ -310,9 +310,9 @@ For ARIMA(2,1,0), the paper and this replication produce:
 | AR(1) | 0.3783 | 0.3336 |
 | AR(2) | -0.6652 | -0.6635 |
 
-The second coefficient is very close, while the first is not reproduced exactly from the published data using the maximum-likelihood specification used in this repository.
+The second coefficient is very close under the main maximum-likelihood replication, while the first is not reproduced exactly. As an additional robustness check, six standard R estimation routes were examined: maximum likelihood and conditional sum of squares for ARIMA(2,1,0), maximum likelihood and conditional sum of squares for an AR(2) model fitted to the differenced series with a mean, Yule-Walker estimation, and Burg estimation. Across these approaches, the AR(1) estimate ranges from approximately **0.2766 to 0.3389**, below the published value of **0.3783**.
 
-Because ARIMA estimates can depend on estimation method and implementation, this is treated as an estimation-related replication discrepancy.
+These checks do not rule out every possible historical implementation, but they show that the published coefficient pair is not recovered under several standard R estimation approaches.
 
 ### Published forecasting equation
 
