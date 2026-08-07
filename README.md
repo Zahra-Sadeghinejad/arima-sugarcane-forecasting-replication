@@ -257,44 +257,114 @@ The complete test results are available in:
 
 ## Replication Notes
 
-The replication reproduces the central model-selection result of the original study:
+The original 2023 project follows the paper's Box-Jenkins workflow and selects ARIMA(2,1,0) from the same candidate model family. During preparation of this public repository, additional checks were performed to determine which published quantities can be reproduced from the reported data and methodology.
 
-> ARIMA(2,1,0) is preferred to ARIMA(2,1,1) and ARIMA(2,1,2).
+### What reproduces
 
-However, the exact numerical estimates obtained in the replication are not identical to those reported in the published paper.
+The information-criterion arithmetic in the paper's model-selection table is internally consistent with its own reported log-likelihoods.
 
-### Selected Model Comparison
+For the published ARIMA(2,1,0) result:
 
-| Result | Original Paper | Replication |
+| Metric | Published value |
+|---|---:|
+| Log-likelihood | -257.39 |
+| AIC | 520.78 |
+| AICc | 521.20 |
+| BIC | 527.11 |
+
+The same internal arithmetic consistency holds for the other candidate models. This suggests that the information-criterion calculations themselves are not the source of the replication gap.
+
+### Differenced-series autocorrelations
+
+A discrepancy appears before ARIMA parameter estimation.
+
+Using the observations reported in the paper's data table, the first-differenced series produces autocorrelations that do not exactly match the values reported in the paper's ACF table.
+
+| Lag | Published ACF | Reproduced ACF |
+|---:|---:|---:|
+| 1 | 0.202 | 0.165 |
+| 3 | -0.400 | -0.338 |
+| 5 | 0.336 | 0.276 |
+
+Because these quantities are calculated directly from the differenced data, this discrepancy is already present before the ARIMA model is fitted.
+
+### Mean of the differenced series
+
+The paper states that the mean of the first-differenced series is **5.13**.
+
+However, the mean implied directly by the published observations is:
+
+**(342.20 - 57.05) / 61 = 4.6746**
+
+This follows directly from the telescoping sum of the first differences.
+
+For comparison, fitting ARIMA(2,1,0) with a drift term in R produces an estimated drift of **4.4587**. The drift parameter belongs to a different model specification and is therefore not treated as identical to the sample mean; it is included only as an additional comparison.
+
+Neither quantity yields the stated value of 5.13.
+
+### ARIMA coefficients
+
+For ARIMA(2,1,0), the paper and this replication produce:
+
+| Parameter | Published | Reproduced |
 |---|---:|---:|
 | AR(1) | 0.3783 | 0.3336 |
 | AR(2) | -0.6652 | -0.6635 |
-| Innovation variance | 265.4 | 269.6 |
-| Log-likelihood | -257.39 | -256.85 |
-| AIC | 520.78 | 519.70 |
-| AICc | 521.20 | 520.12 |
-| BIC | 527.11 | 526.03 |
 
-Despite these numerical differences, both analyses select ARIMA(2,1,0) as the preferred specification.
+The second coefficient is very close, while the first is not reproduced exactly from the published data using the maximum-likelihood specification used in this repository.
 
-### Forecast Comparison
+Because ARIMA estimates can depend on estimation method and implementation, this is treated as an estimation-related replication discrepancy.
 
-| Year | Original Paper | Replication |
-|---|---:|---:|
-| 2013 | 350.49 | 312.12 |
-| 2014 | 322.60 | 300.07 |
-| 2015 | 325.03 | 316.01 |
-| 2016 | 344.50 | 329.32 |
-| 2017 | 350.25 | 323.19 |
+### Published forecasting equation
 
-The purpose of this repository is to provide a transparent and reproducible implementation of the published workflow, rather than to manually adjust the reproduced output to match the paper.
+The paper states a differenced-series mean of **5.13** and AR coefficients of **0.3783** and **-0.6652**.
 
-The residual autocorrelation statistics also differ numerically, while both analyses reach the same qualitative conclusion that there is no strong evidence of remaining residual autocorrelation.
+Applying those stated quantities to the final observations in the published dataset produces a 2013 forecast of approximately **318.78**.
 
-Possible sources of numerical differences include software versions, package implementations, and other implementation details. The repository reports the results generated directly by the documented R code.
+The paper reports a 2013 forecast of **350.489**.
 
----
+Therefore, the published 2013 forecast cannot be recovered directly by applying the paper's stated forecasting equation, coefficients, mean, and published final observations. The discrepancy persists across the multi-year forecast path.
 
+### Residual autocorrelation diagnostics
+
+The paper reports:
+
+- Ljung-Box statistic = 17.6672
+- Box-Pierce statistic = 14.8789
+- degrees of freedom = 20
+
+The paper discusses residual autocorrelations through lag 20. The published output is therefore most directly consistent with a 20-lag test without an ARMA degrees-of-freedom adjustment, although the exact software call cannot be identified from the published output alone.
+
+Using that specification on the reproduced R residuals gives:
+
+| Test | Reproduced statistic | df | p-value |
+|---|---:|---:|---:|
+| Ljung-Box | 12.1445 | 20 | 0.9110 |
+| Box-Pierce | 10.2230 | 20 | 0.9639 |
+
+Thus, matching the published lag range and reported degrees of freedom does not reproduce the paper's reported residual-test statistics.
+
+The repository separately reports the conventional ARIMA adjustment (`fitdf = p + q = 2`) and preserves the original 2023 coursework setting (`lag = 25`, `fitdf = 5`) for transparency.
+
+### ADF result
+
+The paper reports an ADF statistic of approximately **-5.5395** at lag 3, while the supplementary `tseries::adf.test()` calculation in this repository gives approximately **-5.2988** at lag 3.
+
+Unlike the sample mean or raw autocorrelations, an ADF statistic can depend on the deterministic specification, lag construction, and software implementation. This difference is therefore recorded as an unresolved implementation-sensitive replication discrepancy.
+
+### Interpretation
+
+Several reported quantities cannot be reproduced exactly from the published data and stated methodology, including:
+
+- differenced-series autocorrelations;
+- the stated mean of the differenced series;
+- the reported ARIMA coefficients;
+- residual autocorrelation statistics; and
+- the published forecasts.
+
+At the same time, the paper's information-criterion arithmetic is internally consistent with its reported likelihood values.
+
+The source of the remaining differences cannot be determined from the published information alone. However, because some discrepancies are already visible in quantities calculated directly from the published observations, they cannot be attributed solely to software-version or ARIMA-estimation differences.
 ## Repository Structure
 
 ```text
