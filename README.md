@@ -51,6 +51,8 @@ The dataset used in the analysis is available in:
 
 ### Historical Production Series
 
+![Sugarcane production in India](figures/01_original_series.png)
+
 The production series shows a strong long-run upward movement, indicating that stationarity should be examined before fitting an ARIMA model.
 
 ### First Differencing
@@ -60,6 +62,8 @@ The analysis applies first differencing:
 $$
 \Delta y_t = y_t - y_{t-1}
 $$
+
+![First-differenced sugarcane production](figures/02_first_difference.png)
 
 After differencing, the series fluctuates around a substantially more stable mean.
 
@@ -94,7 +98,7 @@ An additional ADF test is performed using the `tseries` package as a supplementa
 
 ## Stationarity Results
 
-The ADF test fails to reject a unit root in the level series but strongly rejects the unit-root null after first differencing. This supports using an integration order of \(d = 1\).
+The ADF test fails to reject a unit root in the level series but strongly rejects the unit-root null after first differencing. This supports using an integration order of **d = 1**.
 
 | Series | Test | Test Statistic | Lag | 5% Critical Value | Conclusion |
 |---|---|---:|---:|---:|---|
@@ -163,6 +167,8 @@ The complete model-comparison results are available in:
 
 Using the selected ARIMA(2,1,0) model, five-step-ahead forecasts were generated for 2013–2017.
 
+![ARIMA forecast](figures/03_forecast.png)
+
 | Year | Point Forecast | 80% Interval | 95% Interval | 99.5% Interval |
 |---|---:|---:|---:|---:|
 | 2013 | 312.12 | 291.07 – 333.16 | 279.93 – 344.30 | 266.03 – 358.21 |
@@ -181,6 +187,8 @@ The full forecast output is available in:
 
 ### Observed vs. Fitted Values
 
+![Observed versus fitted values](figures/04_observed_vs_fitted.png)
+
 The fitted series captures the broad movement of the observed production data while smoothing some of the year-to-year variation.
 
 ---
@@ -190,6 +198,8 @@ The fitted series captures the broad movement of the observed production data wh
 Residual diagnostics were used to assess whether the selected ARIMA(2,1,0) model left substantial systematic structure unexplained.
 
 ### Standardized Residuals
+
+![Standardized residuals](figures/05_standardized_residuals.png)
 
 Residuals were additionally scaled by the estimated innovation standard deviation:
 
@@ -201,9 +211,13 @@ The standardized-residual plot was added during the reproducibility cleanup of t
 
 ### Normality Check
 
+![Normal Q-Q plot](figures/06_qq_plot.png)
+
 The Q-Q plot provides a visual diagnostic of how closely the residual distribution resembles a normal distribution. It is used here as a diagnostic rather than as a formal normality test.
 
 ### Residual Autocorrelation
+
+![Residual ACF](figures/07_residual_acf.png)
 
 The residual ACF is used to examine whether meaningful serial dependence remains after fitting the model.
 
