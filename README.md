@@ -90,7 +90,13 @@ The replication follows a Box–Jenkins ARIMA modelling workflow:
    - Ljung–Box test
    - Box–Pierce test
 
-The original 2023 coursework used custom unit-root functions supplied as course material. For this public repository, the required ADF-OLS test and BIC lag-selection procedure were independently implemented in `adf_helpers.R`, reproducing the original project results.
+The original 2023 coursework used custom unit-root functions supplied as course material. For this public repository, the required procedure was independently implemented in `adf_helpers.R`, reproducing the original project results. The implementation follows three steps:
+
+1. GLS-detrend the series for lag-order selection.
+2. Select the number of augmentation lags using BIC.
+3. Estimate the final ADF regression by OLS on the original series.
+
+Accordingly, the shorthand `ADF-OLS + BIC` used in the results tables refers to an OLS ADF test whose augmentation lag is selected by BIC on the GLS-detrended series.
 
 An additional ADF test is performed using the `tseries` package as a supplementary stationarity check.
 
