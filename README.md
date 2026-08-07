@@ -285,6 +285,7 @@ Possible sources of numerical differences include software versions, package imp
 ```text
 arima-sugarcane-replication/
 ├── analysis.R
+├── plots.R
 ├── adf_helpers.R
 ├── save_outputs.R
 ├── README.md

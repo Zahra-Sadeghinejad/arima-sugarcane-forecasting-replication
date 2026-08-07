@@ -15,6 +15,9 @@
 library(tseries)
 library(forecast)
 
+# Shared plotting functions for interactive and saved figures
+source("plots.R")
+
 # Load data
 # Annual sugarcane production in India, crop years 1950-51 to 2011-12
 # The observations are represented as 1951-2012 in the R time-series object.
@@ -39,31 +42,7 @@ mydata$Production <- ts(
 # -------------------------------------------------------------------------
 
 # Plot the original time series
-plot(
-  mydata$Production,
-  type = "l",
-  col = "black",
-  xlab = "Year",
-  ylab = "Production (million tonnes)",
-  main = "Sugarcane Production in India, 1951-2012",
-  lwd = 2.5,
-  ylim = c(0, 450),
-  xaxt = "n"
-)
-
-axis(
-  side = 1,
-  at = seq(1951, 2011, by = 10),
-  labels = seq(1951, 2011, by = 10)
-)
-
-points(
-  mydata$Production,
-  pch = 23,
-  col = "blue",
-  bg = "red",
-  cex = 1.5
-)
+plot_original_series(mydata$Production)
 
 # First difference
 mydata$diff1 <- c(NA, diff(mydata$Production))
@@ -75,32 +54,7 @@ mydata$diff1 <- ts(
 )
 
 # Plot the first-differenced series
-plot(
-  mydata$diff1,
-  type = "l",
-  col = "red",
-  ylim = c(-70, 70),
-  main = "First-Differenced Sugarcane Production",
-  ylab = "Change in production (million tonnes)",
-  xlab = "Year",
-  xaxt = "n"
-)
-
-axis(
-  side = 1,
-  at = seq(1951, 2011, by = 10),
-  labels = seq(1951, 2011, by = 10)
-)
-
-points(
-  mydata$diff1,
-  pch = 19,
-  col = "blue",
-  cex = 0.5
-)
-
-grid()
-abline(h = 0)
+plot_first_difference(mydata$diff1)
 
 # -------------------------------------------------------------------------
 # 3. Stationarity Testing
@@ -224,83 +178,13 @@ print(forecast_210)
 # Plot the five-year forecast
 # Plot settings follow the original paper where possible.
 # The y-axis limit of 400 is retained for replication consistency.
-plot(
-  forecast_210,
-  xlim = c(1951, 2017),
-  ylim = c(0, 400),
-  fcol = 10,
-  xlab = "Year",
-  ylab = "Production (million tonnes)",
-  main = "Forecasts from ARIMA(2,1,0)"
-)
+plot_forecast_210(forecast_210)
 
 # Plot observed and fitted values for the selected model
-old_mar <- par("mar")
-
-# Extra bottom space for vertical year labels
-par(mar = c(7, 4, 2, 2))
-
-# Create the plot without drawing the data yet
-plot(
+plot_observed_vs_fitted(
   mydata$Production,
-  type = "n",
-  ann = FALSE,
-  ylim = c(0, 400),
-  xaxt = "n"
+  forecast_210$fitted
 )
-
-# Add a light-grey background within the plotting area
-usr <- par("usr")
-
-rect(
-  usr[1],
-  usr[3],
-  usr[2],
-  usr[4],
-  col = "grey95",
-  border = NA
-)
-
-# Observed series
-lines(
-  mydata$Production,
-  col = "red"
-)
-
-# Fitted series
-lines(
-  forecast_210$fitted,
-  col = "green"
-)
-
-# Vertical years: 1951, 1953, 1955, ...
-axis(
-  side = 1,
-  at = seq(1951, 2011, by = 2),
-  labels = seq(1951, 2011, by = 2),
-  las = 2,
-  cex.axis = 0.7
-)
-
-# Redraw border around plotting area
-box()
-
-title(
-  main = "Sugarcane Production Fitted with ARIMA(2,1,0) Model",
-  cex.main = 0.9
-)
-
-# Legend
-legend(
-  x = "topleft",
-  c("Observed", "Fit"),
-  col = c("red", "green"),
-  lty = 1,
-  lwd = 1
-)
-
-# Restore original margins
-par(mar = old_mar)
 
 # -------------------------------------------------------------------------
 # 7. Residual Diagnostics
@@ -327,16 +211,11 @@ abline(h = 0)
 # Standardize residuals using the estimated innovation standard deviation
 standardized_residuals <- residuals_model1 / sqrt(model1$sigma2)
 
-plot(
+plot_standardized_residuals(
   standardized_residuals,
   col = "blue",
-  ylab = "Standardized Residual",
-  xlab = "Year",
-  type = "h",
-  main = "Standardized Residuals from ARIMA(2,1,0)"
+  type = "h"
 )
-
-abline(h = 0)
 
 # Residuals displayed as a line plot
 plot(
@@ -425,27 +304,10 @@ lines(
 )
 
 # Q-Q plot of residuals
-qqnorm(
-  residuals_model1,
-  pch = 1,
-  frame = TRUE,
-  ylab = "Residuals",
-  main = "Normal Q-Q Plot of ARIMA(2,1,0) Residuals"
-)
-
-qqline(
-  residuals_model1,
-  col = "red"
-)
-
-grid(5, 5)
+plot_residual_qq(residuals_model1)
 
 # ACF of residuals
-acf(
-  residuals_model1,
-  lag.max = 20,
-  main = "ACF of ARIMA(2,1,0) Residuals"
-)
+plot_residual_acf(residuals_model1)
 
 # PACF of residuals
 pacf(

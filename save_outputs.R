@@ -141,6 +141,10 @@ write.csv(
 # 4. Save selected figures
 # -------------------------------------------------------------------------
 
+# The plotting functions are defined in plots.R and are also used by
+# analysis.R, providing a single source of truth for interactive and
+# committed figures.
+
 # Figure 1: Original series
 png(
   "figures/01_original_series.png",
@@ -148,33 +152,7 @@ png(
   height = 1000,
   res = 160
 )
-
-plot(
-  mydata$Production,
-  type = "l",
-  col = "black",
-  xlab = "Year",
-  ylab = "Production (million tonnes)",
-  main = "Sugarcane Production in India, 1951-2012",
-  lwd = 2.5,
-  ylim = c(0, 450),
-  xaxt = "n"
-)
-
-axis(
-  side = 1,
-  at = seq(1951, 2011, by = 10),
-  labels = seq(1951, 2011, by = 10)
-)
-
-points(
-  mydata$Production,
-  pch = 23,
-  col = "blue",
-  bg = "red",
-  cex = 1.5
-)
-
+plot_original_series(mydata$Production)
 dev.off()
 
 # Figure 2: First difference
@@ -184,34 +162,7 @@ png(
   height = 1000,
   res = 160
 )
-
-plot(
-  mydata$diff1,
-  type = "l",
-  col = "red",
-  ylim = c(-70, 70),
-  main = "First-Differenced Sugarcane Production",
-  ylab = "Change in production (million tonnes)",
-  xlab = "Year",
-  xaxt = "n"
-)
-
-axis(
-  side = 1,
-  at = seq(1951, 2011, by = 10),
-  labels = seq(1951, 2011, by = 10)
-)
-
-points(
-  mydata$diff1,
-  pch = 19,
-  col = "blue",
-  cex = 0.5
-)
-
-grid()
-abline(h = 0)
-
+plot_first_difference(mydata$diff1)
 dev.off()
 
 # Figure 3: Forecast
@@ -221,17 +172,7 @@ png(
   height = 1000,
   res = 160
 )
-
-plot(
-  forecast_210,
-  xlim = c(1951, 2017),
-  ylim = c(0, 400),
-  fcol = 10,
-  xlab = "Year",
-  ylab = "Production (million tonnes)",
-  main = "Forecasts from ARIMA(2,1,0)"
-)
-
+plot_forecast_210(forecast_210)
 dev.off()
 
 # Figure 4: Observed vs fitted
@@ -241,63 +182,10 @@ png(
   height = 1000,
   res = 160
 )
-
-old_mar <- par("mar")
-par(mar = c(7, 4, 2, 2))
-
-plot(
+plot_observed_vs_fitted(
   mydata$Production,
-  type = "n",
-  ann = FALSE,
-  ylim = c(0, 400),
-  xaxt = "n"
+  forecast_210$fitted
 )
-
-usr <- par("usr")
-
-rect(
-  usr[1],
-  usr[3],
-  usr[2],
-  usr[4],
-  col = "grey95",
-  border = NA
-)
-
-lines(
-  mydata$Production,
-  col = "red"
-)
-
-lines(
-  forecast_210$fitted,
-  col = "green"
-)
-
-axis(
-  side = 1,
-  at = seq(1951, 2011, by = 2),
-  labels = seq(1951, 2011, by = 2),
-  las = 2,
-  cex.axis = 0.7
-)
-
-box()
-
-title(
-  main = "Sugarcane Production Fitted with ARIMA(2,1,0) Model",
-  cex.main = 0.9
-)
-
-legend(
-  x = "topleft",
-  c("Observed", "Fit"),
-  col = c("red", "green"),
-  lty = 1,
-  lwd = 1
-)
-
-par(mar = old_mar)
 dev.off()
 
 # Figure 5: Standardized residuals
@@ -307,18 +195,11 @@ png(
   height = 1000,
   res = 160
 )
-
-plot(
+plot_standardized_residuals(
   standardized_residuals,
   col = "black",
-  ylab = "Standardized Residual",
-  xlab = "Year",
-  type = "h",
-  main = "Standardized Residuals from ARIMA(2,1,0)"
+  type = "h"
 )
-
-abline(h = 0)
-
 dev.off()
 
 # Figure 6: Q-Q plot
@@ -328,22 +209,7 @@ png(
   height = 1000,
   res = 160
 )
-
-qqnorm(
-  residuals_model1,
-  pch = 1,
-  frame = TRUE,
-  ylab = "Residuals",
-  main = "Normal Q-Q Plot of ARIMA(2,1,0) Residuals"
-)
-
-qqline(
-  residuals_model1,
-  col = "red"
-)
-
-grid(5, 5)
-
+plot_residual_qq(residuals_model1)
 dev.off()
 
 # Figure 7: Residual ACF
@@ -353,13 +219,7 @@ png(
   height = 1000,
   res = 160
 )
-
-acf(
-  residuals_model1,
-  lag.max = 20,
-  main = "ACF of ARIMA(2,1,0) Residuals"
-)
-
+plot_residual_acf(residuals_model1)
 dev.off()
 
 message(
