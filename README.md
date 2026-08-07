@@ -365,11 +365,62 @@ Several reported quantities cannot be reproduced exactly from the published data
 At the same time, the paper's information-criterion arithmetic is internally consistent with its reported likelihood values.
 
 The source of the remaining differences cannot be determined from the published information alone. However, because some discrepancies are already visible in quantities calculated directly from the published observations, they cannot be attributed solely to software-version or ARIMA-estimation differences.
+## Extension: Testing a Drift Specification
+
+The core replication above preserves the ARIMA(2,1,0) specification used in the original 2023 project. The following analysis is intentionally treated as a separate extension rather than as a replacement for that replication.
+
+A second ARIMA(2,1,0) model was estimated with a drift term.
+
+| Specification | Drift | Log-likelihood | AIC | AICc | BIC |
+|---|---:|---:|---:|---:|---:|
+| ARIMA(2,1,0), no drift | — | -256.8503 | 519.7007 | 520.1217 | 526.0333 |
+| ARIMA(2,1,0) + drift | 4.4587 | -252.2073 | 512.4146 | 513.1289 | 520.8581 |
+
+Within this same ARIMA order, allowing drift improves:
+
+- AIC by approximately **7.29 points**;
+- AICc by approximately **6.99 points**; and
+- BIC by approximately **5.18 points**.
+
+The estimated drift is **4.4587 million tonnes per year**, compared with a sample mean first difference of approximately **4.6746 million tonnes**.
+
+This provides evidence that a non-zero trend component is worth considering for these data.
+
+### Does drift explain the published forecast gap?
+
+No.
+
+The five-year forecast path from the drift specification is closer to the forecasts reported in the original paper, but it still does not reproduce them.
+
+| Specification | MAE relative to published forecasts |
+|---|---:|
+| Replication without drift | 22.4308 |
+| Estimated drift model | 13.5848 |
+| Paper's stated equation and parameters | 11.8240 |
+
+These MAE values measure distance from the **published forecast path**, not forecast accuracy against subsequently realized production.
+
+The drift model therefore represents a model-specification improvement supported by the information criteria, but it does **not** explain the replication discrepancies documented above.
+
+This distinction is important:
+
+1. **Model specification:** within ARIMA(2,1,0), the data favor including drift.
+2. **Replication gap:** the paper's reported forecasts still cannot be reconstructed from its published data, coefficients, stated differenced-series mean, and forecasting equation.
+
+Reproducible extension outputs are saved in:
+
+- `results/drift_model_comparison.csv`
+- `results/drift_forecast_comparison.csv`
+
+
+---
+
 ## Repository Structure
 
 ```text
 arima-sugarcane-replication/
 ├── analysis.R
+├── drift_extension.R
 ├── plots.R
 ├── adf_helpers.R
 ├── save_outputs.R
@@ -432,7 +483,7 @@ This reproduces the statistical workflow and prints the main model estimates, fo
 
 ### 4. Reproduce the committed outputs
 
-To regenerate all committed output files — including the four result tables and eight figures — run from the repository root:
+To regenerate all committed output files — including the six result tables and eight figures — run from the repository root:
 
 ```bash
 Rscript save_outputs.R
@@ -443,7 +494,7 @@ Rscript save_outputs.R
 A successful run ends with:
 
 ```text
-Reproducible outputs generated: 4 result tables in results/ and 8 figures in figures/.
+Reproducible outputs generated: 6 result tables in results/ and 8 figures in figures/.
 ```
 
 ---

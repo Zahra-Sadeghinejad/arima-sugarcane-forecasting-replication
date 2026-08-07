@@ -5,7 +5,7 @@
 #   source("save_outputs.R")
 #
 # This script sources analysis.R, then regenerates:
-#   - 4 CSV files in results/
+#   - 6 CSV files in results/
 #   - 8 PNG files in figures/
 
 # -------------------------------------------------------------------------
@@ -18,7 +18,10 @@ grDevices::pdf(temporary_plot_file)
 analysis_error <- NULL
 
 tryCatch(
-  source("analysis.R"),
+  {
+    source("analysis.R")
+    source("drift_extension.R")
+  },
   error = function(e) {
     analysis_error <<- e
   },
@@ -166,6 +169,20 @@ write.csv(
   row.names = FALSE
 )
 
+# Drift-extension model comparison
+write.csv(
+  drift_model_comparison,
+  "results/drift_model_comparison.csv",
+  row.names = FALSE
+)
+
+# Drift-extension forecast comparison
+write.csv(
+  drift_forecast_comparison,
+  "results/drift_forecast_comparison.csv",
+  row.names = FALSE
+)
+
 # -------------------------------------------------------------------------
 # 4. Save selected figures
 # -------------------------------------------------------------------------
@@ -263,5 +280,5 @@ dev.off()
 
 message(
   "Reproducible outputs generated: ",
-  "4 result tables in results/ and 8 figures in figures/."
+  "6 result tables in results/ and 8 figures in figures/."
 )
