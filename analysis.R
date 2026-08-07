@@ -89,18 +89,20 @@ print(adf_tseries)
 # -------------------------------------------------------------------------
 
 # ACF and PACF of the first-differenced series
+# Plot using the shared function defined in plots.R
+plot_acf_pacf_first_difference(mydata$diff1)
+
+# Store the same diagnostics without creating additional plots
 acf_result <- Acf(
   mydata$diff1,
   lag.max = 20,
-  main = "ACF of First-Differenced Sugarcane Production",
-  ylim = c(-1, 1)
+  plot = FALSE
 )
 
 pacf_result <- Pacf(
   mydata$diff1,
   lag.max = 20,
-  main = "PACF of First-Differenced Sugarcane Production",
-  ylim = c(-1, 1)
+  plot = FALSE
 )
 
 print(acf_result)
