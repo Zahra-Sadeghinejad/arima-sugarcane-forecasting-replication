@@ -28,7 +28,7 @@ The core replication selects **ARIMA(2,1,0)** among the three original candidate
 
 The reproducibility audit adds two further findings:
 
-- **Several quantities reported in the original study cannot be reproduced from its published data and stated methodology.** In particular, discrepancies already appear in the autocorrelations of the first-differenced series, before any ARIMA model is estimated.
+- **The published results cannot be fully reconstructed from the published data and stated methodology.** The strongest discrepancy is that the paper's stated forecasting equation, coefficients, mean, and final observations do not reproduce its published forecast path; additional differences appear in the stated differenced-series mean and in some reported diagnostics.
 - **Within the same ARIMA(2,1,0) order, the data favour including drift.** Adding drift improves AIC by approximately **7.29 points** and BIC by approximately **5.18 points**, although it still does not reproduce the published forecast path.
 
 These results separate two questions: whether the original analysis can be reproduced as reported, and whether an alternative specification is better supported by the data.
@@ -277,18 +277,13 @@ The same internal arithmetic consistency holds for the other candidate models. T
 
 ### Differenced-series autocorrelations
 
-A discrepancy appears before ARIMA parameter estimation.
+Most of the autocorrelations reported for the first-differenced series can be reproduced reasonably closely from the observations printed in the paper.
 
-Using the observations reported in the paper's data table, the first-differenced series produces autocorrelations that do not exactly match the values reported in the paper's ACF table.
+Across lags 1–20, **7 of 20 reproduced ACF values are within 0.003 of the published values and 12 of 20 are within 0.02**. A smaller subset of lags differs by approximately 0.03–0.06.
 
-| Lag | Published ACF | Reproduced ACF |
-|---:|---:|---:|
-| 1 | 0.202 | 0.165 |
-| 3 | -0.400 | -0.338 |
-| 5 | 0.336 | 0.276 |
+The differences are therefore not best interpreted as evidence that the entire published ACF calculation used a different estimator. Instead, the overall pattern is consistent with a series that is very similar, but potentially not identical, to the values printed in the paper's data table. Uneven rounding in the published ACF table may also account for part of the smaller differences.
 
-Because these quantities are calculated directly from the differenced data, this discrepancy is already present before the ARIMA model is fitted.
-
+Because the underlying historical data used by the authors cannot be independently recovered from the publication, the source of the remaining ACF differences cannot be determined conclusively.
 ### Mean of the differenced series
 
 The paper states that the mean of the first-differenced series is **5.13**.
@@ -355,23 +350,22 @@ Unlike the sample mean or raw autocorrelations, an ADF statistic can depend on t
 
 ### Interpretation
 
-Several reported quantities cannot be reproduced exactly from the published data and stated methodology, including:
+The published results cannot be fully reconstructed from the data and methodology available in the paper.
 
-- differenced-series autocorrelations;
-- the stated mean of the differenced series;
-- the reported ARIMA coefficients;
-- residual autocorrelation statistics; and
-- the published forecasts.
+The strongest discrepancies are those that require little or no implementation choice:
 
-At the same time, the paper's information-criterion arithmetic is internally consistent with its reported likelihood values.
+- the observations printed in the paper imply a mean first difference of **4.6746**, rather than the stated **5.13**;
+- applying the paper's stated forecasting equation, mean, AR coefficients, and final observations gives a 2013 forecast of approximately **318.78**, rather than the published **350.489**.
 
-The source of the remaining differences cannot be determined from the published information alone. However, because some discrepancies are already visible in quantities calculated directly from the published observations, they cannot be attributed solely to software-version or ARIMA-estimation differences.
+Other differences require more caution. Most published ACF values reproduce closely, although a subset differs; the ARIMA coefficients are not recovered under several standard modern R estimation approaches; and the residual-diagnostic statistics depend on the fitted residuals and are therefore downstream of parameter-estimation differences.
+
+One possible explanation is that the series actually analysed differed slightly from the values printed in the published data table. Such a difference could affect the ACF, estimated mean, model coefficients, residuals, and forecasts simultaneously. However, the publication does not provide enough information to determine whether this reflects data revision, transcription, formatting, software implementation, or another undocumented step.
+
+Accordingly, the conclusion of this audit is deliberately narrow: **the published results cannot be fully reconstructed from the published data and stated methodology.**
 
 ---
 
 ## Extension: Testing a Drift Specification
-
-
 
 ![Forecast path comparison](figures/09_forecast_path_comparison.png)
 
