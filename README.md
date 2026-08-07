@@ -14,23 +14,22 @@ The original replication was completed as a Financial Time Series project in 202
 
 ## Project Objectives
 
-- Reconstruct the historical sugarcane production series used in the study.
-- Test the series for stationarity using Augmented Dickey-Fuller tests.
-- Apply first differencing to address non-stationarity.
-- Use ACF and PACF to guide ARIMA model identification.
-- Estimate and compare ARIMA(2,1,0), ARIMA(2,1,1), and ARIMA(2,1,2).
-- Select the preferred model using AIC, AICc, and BIC.
-- Generate five-year forecasts for 2013–2017.
-- Evaluate model adequacy using residual diagnostics and autocorrelation tests.
-- Compare the reproduced results with those reported in the original study.
-
----
+- Reproduce the original ARIMA forecasting workflow using the published sugarcane-production data.
+- Evaluate stationarity, model identification, model selection, forecasting, and residual diagnostics.
+- Compare reproduced results with the quantities reported in the original study.
+- Audit whether key published statistics can be reconstructed from the reported data and methodology.
+- Test a drift specification as a separate extension without altering the original replication.
 
 ## Key Result
 
-Among the three candidate specifications, **ARIMA(2,1,0)** produces the lowest AIC, AICc, and BIC and is therefore selected as the preferred model.
+The core replication selects **ARIMA(2,1,0)** among the three original candidate specifications because it has the lowest AIC, AICc, and BIC, while residual diagnostics provide no evidence of significant remaining serial correlation.
 
-Residual diagnostics and formal autocorrelation tests provide no evidence of significant remaining serial correlation.
+The reproducibility audit adds two further findings:
+
+- **Several quantities reported in the original study cannot be reproduced from its published data and stated methodology.** In particular, discrepancies already appear in the autocorrelations of the first-differenced series, before any ARIMA model is estimated.
+- **Within the same ARIMA(2,1,0) order, the data favour including drift.** Adding drift improves AIC by approximately **7.29 points** and BIC by approximately **5.18 points**, although it still does not reproduce the published forecast path.
+
+These results separate two questions: whether the original analysis can be reproduced as reported, and whether an alternative specification is better supported by the data.
 
 ---
 
@@ -255,7 +254,7 @@ The complete test results are available in:
 
 ---
 
-## Replication Notes
+## Replication Discrepancies in the Published Analysis
 
 The original 2023 project follows the paper's Box-Jenkins workflow and selects ARIMA(2,1,0) from the same candidate model family. During preparation of this public repository, additional checks were performed to determine which published quantities can be reproduced from the reported data and methodology.
 
@@ -419,16 +418,15 @@ Reproducible extension outputs are saved in:
 
 ```text
 arima-sugarcane-replication/
+├── LICENSE
+├── README.md
+├── adf_helpers.R
 ├── analysis.R
 ├── drift_extension.R
 ├── plots.R
-├── adf_helpers.R
 ├── save_outputs.R
-├── README.md
-│
 ├── data/
 │   └── production.csv
-│
 ├── figures/
 │   ├── 01_original_series.png
 │   ├── 02_first_difference.png
@@ -438,10 +436,11 @@ arima-sugarcane-replication/
 │   ├── 06_qq_plot.png
 │   ├── 07_residual_acf.png
 │   └── 08_acf_pacf_first_difference.png
-│
 └── results/
-    ├── model_comparison.csv
+    ├── drift_forecast_comparison.csv
+    ├── drift_model_comparison.csv
     ├── forecasts_2013_2017.csv
+    ├── model_comparison.csv
     ├── residual_autocorrelation_tests.csv
     └── stationarity_tests.csv
 ```
@@ -477,9 +476,12 @@ For an interactive run of the analysis in R or RStudio:
 
 ```r
 source("analysis.R")
+
+# Then run the separate drift extension:
+source("drift_extension.R")
 ```
 
-This reproduces the statistical workflow and prints the main model estimates, forecasts, and diagnostics.
+The first command reproduces the core replication workflow and prints its model estimates, forecasts, and diagnostics. The second command runs the drift extension separately without altering the core replication.
 
 ### 4. Reproduce the committed outputs
 
@@ -525,6 +527,14 @@ Reproducible outputs generated: 6 result tables in results/ and 8 figures in fig
 - ADF stationarity testing
 - ACF / PACF diagnostics
 - Ljung–Box and Box–Pierce tests
+
+---
+
+## License
+
+The original code and documentation in this repository are released under the [MIT License](LICENSE).
+
+The historical sugarcane-production data were reconstructed from values reported in the cited study. The MIT License applies to this repository's original code and documentation, not to rights associated with the original publication or its underlying data.
 
 ---
 
