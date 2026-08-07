@@ -174,3 +174,25 @@ plot_residual_acf <- function(residuals) {
     main = "ACF of ARIMA(2,1,0) Residuals"
   )
 }
+
+plot_acf_pacf_first_difference <- function(diff_series) {
+  old_par <- par(no.readonly = TRUE)
+  on.exit(par(old_par))
+
+  par(mfrow = c(1, 2))
+
+  forecast::Acf(
+    diff_series,
+    lag.max = 20,
+    ylim = c(-1, 1),
+    main = "ACF: First-Differenced Series"
+  )
+
+  forecast::Pacf(
+    diff_series,
+    lag.max = 20,
+    ylim = c(-1, 1),
+    main = "PACF: First-Differenced Series"
+  )
+}
+

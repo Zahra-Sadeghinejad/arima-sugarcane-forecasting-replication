@@ -122,6 +122,8 @@ The complete results are available in:
 
 The ACF and PACF of the first-differenced series were examined to guide model identification.
 
+![ACF and PACF of the first-differenced series](figures/08_acf_pacf_first_difference.png)
+
 The PACF contains a particularly strong spike at lag 2, supporting the consideration of two autoregressive terms.
 
 Three candidate specifications were estimated:
@@ -300,7 +302,8 @@ arima-sugarcane-replication/
 │   ├── 04_observed_vs_fitted.png
 │   ├── 05_standardized_residuals.png
 │   ├── 06_qq_plot.png
-│   └── 07_residual_acf.png
+│   ├── 07_residual_acf.png
+│   └── 08_acf_pacf_first_difference.png
 │
 └── results/
     ├── model_comparison.csv

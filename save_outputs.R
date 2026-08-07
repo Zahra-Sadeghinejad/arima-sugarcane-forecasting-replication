@@ -222,7 +222,21 @@ png(
 plot_residual_acf(residuals_model1)
 dev.off()
 
+
+# Figure 8: ACF and PACF of first-differenced series
+png(
+  "figures/08_acf_pacf_first_difference.png",
+  width = 1800,
+  height = 900,
+  res = 160
+)
+
+plot_acf_pacf_first_difference(mydata$diff1)
+
+dev.off()
+
+
 message(
   "Reproducible outputs generated: ",
-  "4 result tables in results/ and 7 figures in figures/."
+  "4 result tables in results/ and 8 figures in figures/."
 )
