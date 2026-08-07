@@ -396,7 +396,9 @@ Original study:
 
 > Kumar, Manoj & Anand, Madhu. *An Application of Time Series ARIMA Forecasting Model for Predicting Sugarcane Production in India.*
 
-The original article is not redistributed in this repository. Please consult the publisher or an authorised source for the paper.
+[View the paper on ResearchGate](https://www.researchgate.net/publication/263505554_An_Application_Of_Time_Series_Arima_Forecasting_Model_For_Predicting_Sugarcane_Production_In_India)
+
+The original article is not redistributed in this repository.
 
 ---
 
