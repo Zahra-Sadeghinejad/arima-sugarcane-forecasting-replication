@@ -72,19 +72,48 @@ write.csv(
 
 # Residual autocorrelation tests
 residual_tests <- data.frame(
-  Test = c("Ljung-Box", "Box-Pierce"),
-  Statistic = c(
-    as.numeric(ljung_box$statistic),
-    as.numeric(box_pierce$statistic)
+  Specification = c(
+    "Conventional ARIMA adjustment",
+    "Conventional ARIMA adjustment",
+    "Paper-style comparison",
+    "Paper-style comparison",
+    "Original 2023 coursework",
+    "Original 2023 coursework"
   ),
+  Test = c(
+    "Ljung-Box",
+    "Box-Pierce",
+    "Ljung-Box",
+    "Box-Pierce",
+    "Ljung-Box",
+    "Box-Pierce"
+  ),
+  Lag = c(20, 20, 20, 20, 25, 25),
+  fitdf = c(2, 2, 0, 0, 5, 5),
+  Statistic = round(c(
+    as.numeric(ljung_box_conventional$statistic),
+    as.numeric(box_pierce_conventional$statistic),
+    as.numeric(ljung_box_paper_style$statistic),
+    as.numeric(box_pierce_paper_style$statistic),
+    as.numeric(ljung_box_coursework$statistic),
+    as.numeric(box_pierce_coursework$statistic)
+  ), 6),
   df = c(
-    as.numeric(ljung_box$parameter),
-    as.numeric(box_pierce$parameter)
+    as.numeric(ljung_box_conventional$parameter),
+    as.numeric(box_pierce_conventional$parameter),
+    as.numeric(ljung_box_paper_style$parameter),
+    as.numeric(box_pierce_paper_style$parameter),
+    as.numeric(ljung_box_coursework$parameter),
+    as.numeric(box_pierce_coursework$parameter)
   ),
-  p_value = c(
-    ljung_box$p.value,
-    box_pierce$p.value
-  )
+  p_value = round(c(
+    ljung_box_conventional$p.value,
+    box_pierce_conventional$p.value,
+    ljung_box_paper_style$p.value,
+    box_pierce_paper_style$p.value,
+    ljung_box_coursework$p.value,
+    box_pierce_coursework$p.value
+  ), 6)
 )
 
 write.csv(

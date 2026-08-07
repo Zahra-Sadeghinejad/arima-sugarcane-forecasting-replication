@@ -229,18 +229,25 @@ The Q-Q plot provides a visual diagnostic of how closely the residual distributi
 
 The residual ACF is used to examine whether meaningful serial dependence remains after fitting the model.
 
-Formal residual autocorrelation tests produce:
+Formal residual autocorrelation tests are reported under three specifications:
 
-| Test | Statistic | df | p-value |
-|---|---:|---:|---:|
-| Ljung–Box | 14.030 | 20 | 0.8290 |
-| Box–Pierce | 11.375 | 20 | 0.9359 |
+| Specification | Lag | `fitdf` | Ljung–Box p-value | Box–Pierce p-value |
+|---|---:|---:|---:|---:|
+| Conventional ARIMA adjustment | 20 | 2 | 0.8397 | 0.9244 |
+| Paper-style comparison | 20 | 0 | 0.9110 | 0.9639 |
+| Original 2023 coursework | 25 | 5 | 0.8290 | 0.9359 |
 
-At conventional significance levels, neither test rejects the null hypothesis of no residual autocorrelation.
+The **conventional ARIMA adjustment** uses `fitdf = p + q = 2` for the ARIMA(2,1,0) model and is treated as the primary residual autocorrelation check.
 
-These results support the conclusion that the selected ARIMA specification captures the main serial dependence in the series.
+The **paper-style comparison** uses 20 lags without a parameter adjustment. This produces 20 degrees of freedom, matching the degrees of freedom reported in the original paper. However, several combinations of `lag` and `fitdf` can produce 20 degrees of freedom, so the paper's exact diagnostic configuration cannot be identified from the published output alone.
 
-For consistency with the original replication, both tests use `lag = 25` and `fitdf = 5`. These settings are retained to reproduce the submitted project's diagnostic results rather than being presented as the only possible degrees-of-freedom adjustment.
+The **original 2023 coursework** used `lag = 25` and `fitdf = 5`. These settings are preserved as a historical replication record rather than as the preferred diagnostic specification.
+
+Twenty lags is relatively high for a sample of 62 annual observations. It is retained in the first two specifications to facilitate comparison with the published analysis rather than because it is uniquely preferred for this sample.
+
+All three specifications lead to the same qualitative conclusion: at conventional significance levels, there is no evidence of significant remaining residual autocorrelation.
+
+Importantly, using the paper-style lag and degrees-of-freedom configuration does not reproduce the paper's reported test statistics exactly. The residual-diagnostic discrepancy therefore cannot be explained by the `lag`/`fitdf` choice alone.
 
 The complete test results are available in:
 

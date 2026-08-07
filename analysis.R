@@ -318,23 +318,74 @@ pacf(
 # 8. Residual Autocorrelation Tests
 # -------------------------------------------------------------------------
 
-# Tests for residual autocorrelation
-# lag = 25 and fitdf = 5 are retained from the original replication
-# to reproduce the reported diagnostic results.
-ljung_box <- Box.test(
+# Three specifications are reported for transparency:
+#
+# 1. Conventional ARIMA adjustment:
+#    lag = 20, fitdf = p + q = 2 for ARIMA(2,1,0).
+#
+# 2. Paper-style comparison:
+#    lag = 20, fitdf = 0. This produces 20 degrees of freedom,
+#    consistent with the df reported in the original paper, although
+#    the paper does not document enough information to identify its
+#    exact lag/fitdf configuration.
+#
+# 3. Original 2023 coursework:
+#    lag = 25, fitdf = 5. This is preserved as a historical replication
+#    setting rather than as the preferred degrees-of-freedom adjustment.
+
+# Conventional ARIMA adjustment
+ljung_box_conventional <- Box.test(
+  residuals_model1,
+  lag = 20,
+  type = "Ljung-Box",
+  fitdf = 2
+)
+
+box_pierce_conventional <- Box.test(
+  residuals_model1,
+  lag = 20,
+  type = "Box-Pierce",
+  fitdf = 2
+)
+
+# Paper-style comparison
+ljung_box_paper_style <- Box.test(
+  residuals_model1,
+  lag = 20,
+  type = "Ljung-Box",
+  fitdf = 0
+)
+
+box_pierce_paper_style <- Box.test(
+  residuals_model1,
+  lag = 20,
+  type = "Box-Pierce",
+  fitdf = 0
+)
+
+# Original 2023 coursework settings
+ljung_box_coursework <- Box.test(
   residuals_model1,
   lag = 25,
   type = "Ljung-Box",
   fitdf = 5
 )
 
-box_pierce <- Box.test(
+box_pierce_coursework <- Box.test(
   residuals_model1,
   lag = 25,
   type = "Box-Pierce",
   fitdf = 5
 )
 
-print(ljung_box)
-print(box_pierce) 
+cat("\nConventional ARIMA adjustment: lag = 20, fitdf = 2\n")
+print(ljung_box_conventional)
+print(box_pierce_conventional)
 
+cat("\nPaper-style comparison: lag = 20, fitdf = 0\n")
+print(ljung_box_paper_style)
+print(box_pierce_paper_style)
+
+cat("\nOriginal 2023 coursework: lag = 25, fitdf = 5\n")
+print(ljung_box_coursework)
+print(box_pierce_coursework)

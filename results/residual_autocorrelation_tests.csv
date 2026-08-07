@@ -1,3 +1,7 @@
-"Test","Statistic","df","p_value"
-"Ljung-Box",14.0296246536233,20,0.828990725370179
-"Box-Pierce",11.3748262218798,20,0.93591698427525
+"Specification","Test","Lag","fitdf","Statistic","df","p_value"
+"Conventional ARIMA adjustment","Ljung-Box",20,2,12.144526,18,0.839687
+"Conventional ARIMA adjustment","Box-Pierce",20,2,10.222979,18,0.924385
+"Paper-style comparison","Ljung-Box",20,0,12.144526,20,0.911012
+"Paper-style comparison","Box-Pierce",20,0,10.222979,20,0.963946
+"Original 2023 coursework","Ljung-Box",25,5,14.029625,20,0.828991
+"Original 2023 coursework","Box-Pierce",25,5,11.374826,20,0.935917
